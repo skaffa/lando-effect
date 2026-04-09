@@ -1,63 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FluidReveal JS Library Demo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             background-color: #050505;
             font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            user-select: none;
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: white;
         }
 
-        /* Container where we will mount the FluidReveal library */
-        #fluid-container {
+        /* SPA Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            pointer-events: auto;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+
+        button:hover,
+        button.active {
+            background: #d2ff00;
+            color: black;
+            border-color: #d2ff00;
+        }
+
+        /* App Root */
+        #app-root {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Page 1: Full Screen */
+        .page-fullscreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-fullscreen .fluid-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
-            cursor: crosshair;
         }
 
-        #ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .page-fullscreen .content {
             z-index: 2;
             pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             text-align: center;
-            background: radial-gradient(circle at center, transparent 30%, rgba(5, 5, 5, 0.85) 100%);
         }
 
-        .header-content {
-            transform: translateY(15vh);
+        /* Page 2: Centered Portrait */
+        .page-portrait {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            padding: 100px 50px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-portrait .text-box {
+            flex: 1;
+        }
+
+        .page-portrait .text-box h2 {
+            font-size: 4rem;
+            margin: 0 0 20px 0;
+            line-height: 1.1;
+        }
+
+        .page-portrait .text-box p {
+            color: #888;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .page-portrait .fluid-wrapper {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .page-portrait .fluid-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Page 3: Banner Strip */
+        .page-banner {
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding-top: 100px;
         }
 
+        .page-banner .fluid-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 1600px;
+            height: 350px;
+            margin: 40px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .page-banner .fluid-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .page-banner h2 {
+            font-size: 3rem;
+            text-align: center;
+        }
+
+        /* Typography shared */
         h1 {
             font-size: 8rem;
             font-weight: 900;
             letter-spacing: -4px;
             margin: 0;
             text-transform: uppercase;
-            color: #ffffff;
             text-shadow: 0px 20px 50px rgba(0, 0, 0, 0.9);
             line-height: 1.0;
         }
@@ -66,7 +182,7 @@
             color: #d2ff00;
         }
 
-        p {
+        .subtitle {
             font-size: 1.3rem;
             font-weight: 400;
             letter-spacing: 4px;
@@ -75,82 +191,106 @@
             margin-top: 20px;
             text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
         }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            border-radius: 4px;
-        }
-
-        .scroll-indicator::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: #d2ff00;
-            border-radius: 4px;
-            animation: scrollDown 2.5s cubic-bezier(0.77, 0, 0.175, 1) infinite;
-        }
-
-        @keyframes scrollDown { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
-
-        #instruction {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            animation: pulse 2s infinite alternate;
-        }
-        @keyframes pulse { 0% { opacity: 0.4; } 100% { opacity: 1; } }
     </style>
 </head>
 
 <body>
-    <!-- The DOM element to be consumed by the library -->
-    <div id="fluid-container"></div>
-    
-    <!-- Optional UI Layer placed strictly over the container -->
-    <div id="ui-layer">
-        <div id="instruction">Hover cursor to reveal mask. Demo powered by custom FluidReveal.js library.</div>
-        <div class="header-content">
-            <h1>Lib<span>rary</span>Demo</h1>
-            <p>Abstracted Physics Component</p>
-        </div>
-        <div class="scroll-indicator"></div>
-    </div>
+    <nav>
+        <button id="btn-1" class="active" onclick="loadPage(1)">Hero Fullscreen</button>
+        <button id="btn-2" onclick="loadPage(2)">Card Portrait</button>
+        <button id="btn-3" onclick="loadPage(3)">Inline Banner</button>
+    </nav>
 
-    <!-- Integrate the library as a module script -->
+    <main id="app-root"></main>
+
     <script type="module">
         import FluidReveal from './fluid-reveal.js';
 
-        // Wait completely effortlessly for the script to load
-        document.addEventListener('DOMContentLoaded', () => {
-            const myFluidEffect = new FluidReveal({
-                container: document.getElementById('fluid-container'),
-                baseTextureUrl: 'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=1080',
-                overlayTextureUrl: 'https://images.unsplash.com/photo-1558981420-c532902e58b4?q=80&w=1080',
-                // Optional override configs
-                options: {
-                    cursor_size: 18,
-                    mouse_force: 50,
-                    resolution: 0.1
-                }
-            });
+        let currentRevealInstance = null;
+        const root = document.getElementById('app-root');
+        const buttons = [document.getElementById('btn-1'), document.getElementById('btn-2'), document.getElementById('btn-3')];
 
-            // To cleanup on route change in SPAs, just call myFluidEffect.destroy()
-        });
+        // Assets
+        const img1Base = 'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=1080';
+        const img1Overlay = 'https://images.unsplash.com/photo-1558981420-c532902e58b4?q=80&w=1080';
+
+        const img2Base = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1080';
+        const img2Overlay = 'https://images.unsplash.com/photo-1522248564284-be4ef995b060?q=80&w=1080';
+
+        const img3Base = 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?q=80&w=2000';
+        const img3Overlay = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000';
+
+        const pages = {
+            1: () => {
+                root.innerHTML = `
+                    <div class="page-fullscreen">
+                        <div id="fluid-target" class="fluid-container"></div>
+                        <div class="content">
+                            <h1>Fluid<span>Reveal</span></h1>
+                            <p class="subtitle">100vw x 100vh Fullscreen</p>
+                        </div>
+                    </div>
+                `;
+                return { base: img1Base, overlay: img1Overlay, config: { cursor_size: 18 } };
+            },
+            2: () => {
+                root.innerHTML = `
+                    <div class="page-portrait">
+                        <div class="text-box">
+                            <h2>Isolated Context</h2>
+                            <p>The WebGL target handles physical aspect ratios perfectly regardless of container stretching. It intelligently calculates the resolution domain to ensure native texture 'cover' styling without clipping or pulling.</p>
+                        </div>
+                        <div class="fluid-wrapper">
+                            <div id="fluid-target" class="fluid-container"></div>
+                        </div>
+                    </div>
+                `;
+                return { base: img2Base, overlay: img2Overlay, config: { cursor_size: 25, mouse_force: 80 } }; // Bigger cursor for smaller box
+            },
+            3: () => {
+                root.innerHTML = `
+                    <div class="page-banner">
+                        <h2>Ultra-Wide Banner</h2>
+                        <p style="color: #666">Perfect for separating sections in a dense landing page.</p>
+                        <div class="fluid-wrapper">
+                            <div id="fluid-target" class="fluid-container"></div>
+                        </div>
+                    </div>
+                `;
+                return { base: img3Base, overlay: img3Overlay, config: { cursor_size: 12, resolution: 0.15 } }; // Higher resolution, smaller cursor
+            }
+        };
+
+        window.loadPage = (num) => {
+            // Update UI
+            buttons.forEach((btn, i) => btn.classList.toggle('active', i + 1 === num));
+
+            // Clean up existing memory
+            if (currentRevealInstance) {
+                currentRevealInstance.destroy();
+                currentRevealInstance = null;
+            }
+
+            // Render HTML
+            const pageData = pages[num]();
+
+            // Allow DOM to paint so clientWidth/clientHeight are available
+            requestAnimationFrame(() => {
+                const target = document.getElementById('fluid-target');
+                if (!target) return;
+
+                currentRevealInstance = new FluidReveal({
+                    container: target,
+                    baseTextureUrl: pageData.base,
+                    overlayTextureUrl: pageData.overlay,
+                    options: pageData.config
+                });
+            });
+        };
+
+        // Init first page
+        document.addEventListener('DOMContentLoaded', () => loadPage(1));
     </script>
 </body>
+
 </html>
