@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluidReveal JS Library Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050505;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Container where we will mount the FluidReveal library */
+        #fluid-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            cursor: crosshair;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, transparent 30%, rgba(5, 5, 5, 0.85) 100%);
+        }
+
+        .header-content {
+            transform: translateY(15vh);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 8rem;
+            font-weight: 900;
+            letter-spacing: -4px;
+            margin: 0;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0px 20px 50px rgba(0, 0, 0, 0.9);
+            line-height: 1.0;
+        }
+
+        h1 span {
+            color: #d2ff00;
+        }
+
+        p {
+            font-size: 1.3rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            margin-top: 20px;
+            text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #d2ff00;
+            border-radius: 4px;
+            animation: scrollDown 2.5s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+        }
+
+        @keyframes scrollDown { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
+
+        #instruction {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite alternate;
+        }
+        @keyframes pulse { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+    </style>
+</head>
+
+<body>
+    <!-- The DOM element to be consumed by the library -->
+    <div id="fluid-container"></div>
+    
+    <!-- Optional UI Layer placed strictly over the container -->
+    <div id="ui-layer">
+        <div id="instruction">Hover cursor to reveal mask. Demo powered by custom FluidReveal.js library.</div>
+        <div class="header-content">
+            <h1>Lib<span>rary</span>Demo</h1>
+            <p>Abstracted Physics Component</p>
+        </div>
+        <div class="scroll-indicator"></div>
+    </div>
+
+    <!-- Integrate the library as a module script -->
+    <script type="module">
+        import FluidReveal from './fluid-reveal.js';
+
+        // Wait completely effortlessly for the script to load
+        document.addEventListener('DOMContentLoaded', () => {
+            const myFluidEffect = new FluidReveal({
+                container: document.getElementById('fluid-container'),
+                baseTextureUrl: 'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=1080',
+                overlayTextureUrl: 'https://images.unsplash.com/photo-1558981420-c532902e58b4?q=80&w=1080',
+                // Optional override configs
+                options: {
+                    cursor_size: 18,
+                    mouse_force: 50,
+                    resolution: 0.1
+                }
+            });
+
+            // To cleanup on route change in SPAs, just call myFluidEffect.destroy()
+        });
+    </script>
+</body>
+</html>
