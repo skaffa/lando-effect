@@ -4,7 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FluidReveal JS Library Demo</title>
+    <title>FluidReveal JS Library - Interactive Navier-Stokes Fluid Simulation Demo</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="FluidReveal JS Library - Interactive Navier-Stokes Fluid Simulation Demo">
+    <meta name="description" content="A mathematically perfect Navier-Stokes fluid simulation proof-of-concept refactored into a reusable, production-ready Vanilla JS library for the web.">
+    <meta name="keywords" content="webgl, fluid simulation, navier-stokes, javascript library, lando norris effect, fluid reveal, interactive mask, frontend, web design">
+    <meta name="author" content="skaffa">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/skaffa/lando-effect">
+    <meta property="og:title" content="FluidReveal JS Library - Interactive Fluid Simulation Demo">
+    <meta property="og:description" content="A mathematically perfect Navier-Stokes fluid simulation proof-of-concept refactored into a reusable, production-ready Vanilla JS library.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=1080">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://github.com/skaffa/lando-effect">
+    <meta property="twitter:title" content="FluidReveal JS Library - Interactive Fluid Simulation Demo">
+    <meta property="twitter:description" content="A mathematically perfect Navier-Stokes fluid simulation proof-of-concept refactored into a reusable, production-ready Vanilla JS library.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=1080">
+    
+    <link rel="canonical" href="https://github.com/skaffa/lando-effect">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         body,
@@ -191,6 +214,27 @@
             margin-top: 20px;
             text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
         }
+
+        /* GitHub Corner */
+        .github-corner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            opacity: 0.5;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .github-corner:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .github-corner svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
     </style>
 </head>
 
@@ -200,6 +244,10 @@
         <button id="btn-2" onclick="loadPage(2)">Card Portrait</button>
         <button id="btn-3" onclick="loadPage(3)">Inline Banner</button>
     </nav>
+
+    <a href="https://github.com/skaffa/lando-effect" target="_blank" rel="noopener noreferrer" class="github-corner" aria-label="View source on GitHub">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+    </a>
 
     <main id="app-root"></main>
 
